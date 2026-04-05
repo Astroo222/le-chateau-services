@@ -90,8 +90,6 @@
         <div class="filter-btn" data-service="autres" onclick="selectService('autres')"><div class="filter-icon fi-other">⚡</div><div><div class="filter-text">Other Services</div><span class="filter-sub">Any other request</span></div></div>
       </div>
     </div>
-
-    <!-- Car Wash -->
     <div class="section-card" id="sec-lavage">
       <p class="section-title">Car wash service <span class="req">*</span></p>
       <p class="section-desc">Select your vehicle type and desired options.</p>
@@ -109,8 +107,6 @@
         <div class="radio-option" onclick="selectRadio('rg-options', this)"><div class="radio-circle"></div><span class="radio-text">Full — Interior + Exterior</span></div>
       </div>
     </div>
-
-    <!-- Airport Transport -->
     <div class="section-card hidden" id="sec-aeroport">
       <p class="section-title">Airport transport</p>
       <p class="section-desc">Specify your preferred direction, date and time.</p>
@@ -127,8 +123,6 @@
       <label class="field-label">Preferred time</label>
       <input class="field-input" id="f-heure-aeroport" type="text" placeholder="e.g. 6:00 AM" />
     </div>
-
-    <!-- Appointment Transport -->
     <div class="section-card hidden" id="sec-rdv">
       <p class="section-title">Appointment transport</p>
       <p class="section-desc">Specify the date, time and destination.</p>
@@ -142,8 +136,6 @@
       <label class="field-label">Destination</label>
       <input class="field-input" id="f-destination" type="text" placeholder="e.g. Medical clinic" />
     </div>
-
-    <!-- Other Services -->
     <div class="section-card hidden" id="sec-autres">
       <p class="section-title">Other services</p>
       <p class="section-desc">Describe your request and Quentin will get back to you.</p>
@@ -154,15 +146,13 @@
       <label class="field-label">Request description <span class="req">*</span></label>
       <input class="field-input" id="f-description" type="text" placeholder="e.g. Package delivery..." />
     </div>
-
-    <!-- Preferred availability — Car Wash only -->
     <div class="section-card" id="dispo-lavage">
       <p class="section-title">Preferred availability</p>
       <p class="section-desc">Car wash available Tuesday, Wednesday and Thursday mornings only.</p>
       <div class="divider"></div>
       <label class="field-label" style="margin-bottom:8px;">Preferred day</label>
       <div class="day-grid-3" id="days-lavage">
-        <button class="slot-btn sel" onclick="selectDay('days-lavage', this)">Tuesday</button>
+        <button class="slot-btn" onclick="selectDay('days-lavage', this)">Tuesday</button>
         <button class="slot-btn" onclick="selectDay('days-lavage', this)">Wednesday</button>
         <button class="slot-btn" onclick="selectDay('days-lavage', this)">Thursday</button>
       </div>
@@ -172,7 +162,6 @@
         <span class="slot-note">Only available time slot</span>
       </div>
     </div>
-
     <div class="card" style="border-radius: 0 0 12px 12px;">
       <div class="btn-row">
         <button class="btn-clear" onclick="clearForm()">Clear form</button>
@@ -180,7 +169,6 @@
       </div>
     </div>
   </div>
-
   <div class="success-screen" id="success-screen">
     <div class="success-icon">✅</div>
     <h2>Request submitted!</h2>
@@ -202,13 +190,14 @@
     document.querySelectorAll('#' + groupId + ' .radio-option').forEach(function(o) { o.classList.remove('selected'); });
     el.classList.add('selected');
   }
-  function selectDay(groupId, el) {
-    document.querySelectorAll('#' + groupId + ' .slot-btn').forEach(function(b) { b.classList.remove('sel'); });
+  function selectDay(el) {
+    document.querySelectorAll('#days-lavage .slot-btn').forEach(function(b) { b.classList.remove('sel'); });
     el.classList.add('sel');
   }
   function clearForm() {
     ['f-appart','f-heure-aeroport','f-heure','f-destination','f-description'].forEach(function(id){ document.getElementById(id).value=''; });
     ['f-date-aeroport','f-date-rdv','f-date-autres'].forEach(function(id){ document.getElementById(id).value=''; });
+    document.querySelectorAll('#days-lavage .slot-btn').forEach(function(b){ b.classList.remove('sel'); });
     document.querySelectorAll('.field-error').forEach(function(e) { e.classList.remove('show'); });
     document.querySelectorAll('.field-input').forEach(function(i) { i.classList.remove('input-error'); });
     selectService('lavage');
@@ -232,7 +221,7 @@
     var service = document.querySelector('.filter-btn.sel .filter-text') ? document.querySelector('.filter-btn.sel .filter-text').textContent : '';
     var vehicle = document.querySelector('#rg-vehicule .radio-option.selected .radio-text') ? document.querySelector('#rg-vehicule .radio-option.selected .radio-text').textContent : '';
     var options = document.querySelector('#rg-options .radio-option.selected .radio-text') ? document.querySelector('#rg-options .radio-option.selected .radio-text').textContent : '';
-    var day = document.querySelector('.slot-btn.sel') ? document.querySelector('.slot-btn.sel').textContent : '';
+    var day = document.querySelector('#days-lavage .slot-btn.sel') ? document.querySelector('#days-lavage .slot-btn.sel').textContent : '';
     var direction = document.querySelector('#rg-aeroport .radio-option.selected .radio-text') ? document.querySelector('#rg-aeroport .radio-option.selected .radio-text').textContent : '';
     var btn = document.querySelector('.btn-submit');
     btn.textContent = 'Sending...'; btn.disabled = true;
