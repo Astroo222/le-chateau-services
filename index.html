@@ -16,6 +16,10 @@
   }
   body { font-family: 'DM Sans', sans-serif; background: var(--bg); min-height: 100vh; padding: 32px 16px 64px; color: var(--text); }
   .page { max-width: 640px; margin: 0 auto; }
+  .lang-bar { display: flex; justify-content: flex-start; margin-bottom: 12px; }
+  .lang-btn { display: flex; gap: 2px; background: var(--surface); border: 0.5px solid var(--border); border-radius: 20px; padding: 4px; }
+  .lang-opt { padding: 5px 14px; border-radius: 16px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; background: transparent; color: var(--text-secondary); transition: all 0.15s; font-family: 'DM Sans', sans-serif; }
+  .lang-opt.active { background: var(--blue); color: #fff; }
   .form-header { background: var(--blue); border-radius: var(--radius-lg) var(--radius-lg) 0 0; padding: 28px 32px 24px; }
   .form-header h1 { color: #fff; font-size: 24px; font-weight: 600; margin-bottom: 6px; }
   .form-header p { color: rgba(255,255,255,0.82); font-size: 14px; line-height: 1.6; }
@@ -69,117 +73,167 @@
 </head>
 <body>
 <div class="page">
+
+  <div class="lang-bar">
+    <div class="lang-btn">
+      <button type="button" class="lang-opt active" onclick="setLang('en')">EN</button>
+      <button type="button" class="lang-opt" onclick="setLang('fr')">FR</button>
+    </div>
+  </div>
+
   <div class="form-header">
-    <h1>Service Request — Residents</h1>
-    <p>Appartements Le Château · Submit your request and Quentin will confirm your time slot.</p>
+    <h1 data-en="Service Request — Residents" data-fr="Demande de service — Résidents">Service Request — Residents</h1>
+    <p data-en="Appartements Le Château · Submit your request and Quentin will confirm your time slot." data-fr="Appartements Le Château · Soumettez votre demande et Quentin confirmera votre créneau.">Appartements Le Château · Submit your request and Quentin will confirm your time slot.</p>
   </div>
   <div class="header-bar"></div>
+
   <div id="main-form">
     <div class="card">
-      <label class="field-label">Apartment number <span class="req">*</span></label>
-      <input class="field-input" id="f-appart" type="text" placeholder="e.g. 412" />
-      <div class="field-error" id="err-appart">This field is required.</div>
+      <label class="field-label" data-en="Apartment number" data-fr="Numéro d'appartement">Apartment number <span class="req">*</span></label>
+      <input class="field-input" id="f-appart" type="text" data-placeholder-en="e.g. 412" data-placeholder-fr="Ex : 412" placeholder="e.g. 412" />
+      <div class="field-error" id="err-appart" data-en="This field is required." data-fr="Ce champ est requis.">This field is required.</div>
     </div>
+
     <div class="section-card">
-      <p class="section-title">What service are you looking for? <span class="req">*</span></p>
-      <p class="section-desc">Select a category to continue.</p>
+      <p class="section-title" data-en="What service are you looking for?" data-fr="Quel service vous intéresse ?">What service are you looking for? <span class="req">*</span></p>
+      <p class="section-desc" data-en="Select a category to continue." data-fr="Sélectionnez une catégorie pour continuer.">Select a category to continue.</p>
       <div class="divider"></div>
       <div class="filter-grid">
-        <div class="filter-btn sel" data-service="lavage" onclick="selectService('lavage')"><div class="filter-icon fi-wash">🚗</div><div><div class="filter-text">Car Wash</div><span class="filter-sub">Exterior / interior</span></div></div>
-        <div class="filter-btn" data-service="aeroport" onclick="selectService('aeroport')"><div class="filter-icon fi-plane">✈️</div><div><div class="filter-text">Airport Transport</div><span class="filter-sub">Drop-off / pick-up</span></div></div>
-        <div class="filter-btn" data-service="rdv" onclick="selectService('rdv')"><div class="filter-icon fi-rdv">📍</div><div><div class="filter-text">Appointment Transport</div><span class="filter-sub">General ride</span></div></div>
-        <div class="filter-btn" data-service="autres" onclick="selectService('autres')"><div class="filter-icon fi-other">⚡</div><div><div class="filter-text">Other Services</div><span class="filter-sub">Any other request</span></div></div>
+        <div class="filter-btn sel" data-service="lavage" onclick="selectService('lavage')">
+          <div class="filter-icon fi-wash">🚗</div>
+          <div><div class="filter-text" data-en="Car Wash" data-fr="Lavage">Car Wash</div><span class="filter-sub" data-en="Exterior / interior" data-fr="Extérieur / intérieur">Exterior / interior</span></div>
+        </div>
+        <div class="filter-btn" data-service="aeroport" onclick="selectService('aeroport')">
+          <div class="filter-icon fi-plane">✈️</div>
+          <div><div class="filter-text" data-en="Airport Transport" data-fr="Transport aéroport">Airport Transport</div><span class="filter-sub" data-en="Drop-off / pick-up" data-fr="Dépose / ramassage">Drop-off / pick-up</span></div>
+        </div>
+        <div class="filter-btn" data-service="rdv" onclick="selectService('rdv')">
+          <div class="filter-icon fi-rdv">📍</div>
+          <div><div class="filter-text" data-en="Appointment Transport" data-fr="Transport rendez-vous">Appointment Transport</div><span class="filter-sub" data-en="General ride" data-fr="Course générale">General ride</span></div>
+        </div>
+        <div class="filter-btn" data-service="autres" onclick="selectService('autres')">
+          <div class="filter-icon fi-other">⚡</div>
+          <div><div class="filter-text" data-en="Other Services" data-fr="Autres services">Other Services</div><span class="filter-sub" data-en="Any other request" data-fr="Toute autre demande">Any other request</span></div>
+        </div>
       </div>
     </div>
+
     <div class="section-card" id="sec-lavage">
-      <p class="section-title">Car wash service <span class="req">*</span></p>
-      <p class="section-desc">Select your vehicle type and desired options.</p>
+      <p class="section-title" data-en="Car wash service" data-fr="Service de lavage">Car wash service <span class="req">*</span></p>
+      <p class="section-desc" data-en="Select your vehicle type and desired options." data-fr="Sélectionnez votre type de véhicule et les options souhaitées.">Select your vehicle type and desired options.</p>
       <div class="divider"></div>
-      <label class="field-label" style="margin-bottom:8px;">Vehicle type</label>
+      <label class="field-label" data-en="Vehicle type" data-fr="Type de véhicule" style="margin-bottom:8px;">Vehicle type</label>
       <div class="radio-group" id="rg-vehicule">
-        <div class="radio-option selected" onclick="selectRadio('rg-vehicule', this)"><div class="radio-circle"></div><span class="radio-text">Car</span></div>
+        <div class="radio-option selected" onclick="selectRadio('rg-vehicule', this)"><div class="radio-circle"></div><span class="radio-text" data-en="Car" data-fr="Voiture">Car</span></div>
         <div class="radio-option" onclick="selectRadio('rg-vehicule', this)"><div class="radio-circle"></div><span class="radio-text">SUV</span></div>
       </div>
       <div class="divider"></div>
-      <label class="field-label" style="margin-bottom:8px;">Options</label>
+      <label class="field-label" data-en="Options" data-fr="Options" style="margin-bottom:8px;">Options</label>
       <div class="radio-group" id="rg-options">
-        <div class="radio-option selected" onclick="selectRadio('rg-options', this)"><div class="radio-circle"></div><span class="radio-text">Exterior wash</span></div>
-        <div class="radio-option" onclick="selectRadio('rg-options', this)"><div class="radio-circle"></div><span class="radio-text">Interior cleaning</span></div>
-        <div class="radio-option" onclick="selectRadio('rg-options', this)"><div class="radio-circle"></div><span class="radio-text">Full — Interior + Exterior</span></div>
+        <div class="radio-option selected" onclick="selectRadio('rg-options', this)"><div class="radio-circle"></div><span class="radio-text" data-en="Exterior wash" data-fr="Lavage extérieur">Exterior wash</span></div>
+        <div class="radio-option" onclick="selectRadio('rg-options', this)"><div class="radio-circle"></div><span class="radio-text" data-en="Interior cleaning" data-fr="Nettoyage intérieur">Interior cleaning</span></div>
+        <div class="radio-option" onclick="selectRadio('rg-options', this)"><div class="radio-circle"></div><span class="radio-text" data-en="Full — Interior + Exterior" data-fr="Forfait complet — Intérieur + Extérieur">Full — Interior + Exterior</span></div>
       </div>
     </div>
+
     <div class="section-card hidden" id="sec-aeroport">
-      <p class="section-title">Airport transport</p>
-      <p class="section-desc">Specify your preferred direction, date and time.</p>
+      <p class="section-title" data-en="Airport transport" data-fr="Transport aéroport">Airport transport</p>
+      <p class="section-desc" data-en="Specify your preferred direction, date and time." data-fr="Précisez votre direction, date et heure souhaitées.">Specify your preferred direction, date and time.</p>
       <div class="divider"></div>
       <div class="radio-group" id="rg-aeroport">
-        <div class="radio-option selected" onclick="selectRadio('rg-aeroport', this)"><div class="radio-circle"></div><span class="radio-text">Drop-off (departure)</span></div>
-        <div class="radio-option" onclick="selectRadio('rg-aeroport', this)"><div class="radio-circle"></div><span class="radio-text">Pick-up (arrival)</span></div>
-        <div class="radio-option" onclick="selectRadio('rg-aeroport', this)"><div class="radio-circle"></div><span class="radio-text">Round trip</span></div>
+        <div class="radio-option selected" onclick="selectRadio('rg-aeroport', this)"><div class="radio-circle"></div><span class="radio-text" data-en="Drop-off (departure)" data-fr="Dépose (départ)">Drop-off (departure)</span></div>
+        <div class="radio-option" onclick="selectRadio('rg-aeroport', this)"><div class="radio-circle"></div><span class="radio-text" data-en="Pick-up (arrival)" data-fr="Ramassage (arrivée)">Pick-up (arrival)</span></div>
+        <div class="radio-option" onclick="selectRadio('rg-aeroport', this)"><div class="radio-circle"></div><span class="radio-text" data-en="Round trip" data-fr="Aller-retour">Round trip</span></div>
       </div>
       <div class="divider"></div>
-      <label class="field-label">Date <span class="req">*</span></label>
+      <label class="field-label" data-en="Date" data-fr="Date">Date <span class="req">*</span></label>
       <input class="field-date" id="f-date-aeroport" type="date" />
       <div class="divider"></div>
-      <label class="field-label">Preferred time</label>
-      <input class="field-input" id="f-heure-aeroport" type="text" placeholder="e.g. 6:00 AM" />
+      <label class="field-label" data-en="Preferred time" data-fr="Heure souhaitée">Preferred time</label>
+      <input class="field-input" id="f-heure-aeroport" type="text" data-placeholder-en="e.g. 6:00 AM" data-placeholder-fr="Ex : 6h00" placeholder="e.g. 6:00 AM" />
     </div>
+
     <div class="section-card hidden" id="sec-rdv">
-      <p class="section-title">Appointment transport</p>
-      <p class="section-desc">Specify the date, time and destination.</p>
+      <p class="section-title" data-en="Appointment transport" data-fr="Transport rendez-vous">Appointment transport</p>
+      <p class="section-desc" data-en="Specify the date, time and destination." data-fr="Précisez la date, l'heure et la destination.">Specify the date, time and destination.</p>
       <div class="divider"></div>
-      <label class="field-label">Date <span class="req">*</span></label>
+      <label class="field-label" data-en="Date" data-fr="Date">Date <span class="req">*</span></label>
       <input class="field-date" id="f-date-rdv" type="date" />
       <div class="divider"></div>
-      <label class="field-label">Preferred time</label>
-      <input class="field-input" id="f-heure" type="text" placeholder="e.g. 10:00 AM" />
+      <label class="field-label" data-en="Preferred time" data-fr="Heure souhaitée">Preferred time</label>
+      <input class="field-input" id="f-heure" type="text" data-placeholder-en="e.g. 10:00 AM" data-placeholder-fr="Ex : 10h00" placeholder="e.g. 10:00 AM" />
       <div class="divider"></div>
-      <label class="field-label">Destination</label>
-      <input class="field-input" id="f-destination" type="text" placeholder="e.g. Medical clinic" />
+      <label class="field-label" data-en="Destination" data-fr="Destination">Destination</label>
+      <input class="field-input" id="f-destination" type="text" data-placeholder-en="e.g. Medical clinic" data-placeholder-fr="Ex : Clinique médicale" placeholder="e.g. Medical clinic" />
     </div>
+
     <div class="section-card hidden" id="sec-autres">
-      <p class="section-title">Other services</p>
-      <p class="section-desc">Describe your request and Quentin will get back to you.</p>
+      <p class="section-title" data-en="Other services" data-fr="Autres services">Other services</p>
+      <p class="section-desc" data-en="Describe your request and Quentin will get back to you." data-fr="Décrivez votre demande et Quentin vous reviendra.">Describe your request and Quentin will get back to you.</p>
       <div class="divider"></div>
-      <label class="field-label">Date <span class="req">*</span></label>
+      <label class="field-label" data-en="Date" data-fr="Date">Date <span class="req">*</span></label>
       <input class="field-date" id="f-date-autres" type="date" />
       <div class="divider"></div>
-      <label class="field-label">Request description <span class="req">*</span></label>
-      <input class="field-input" id="f-description" type="text" placeholder="e.g. Package delivery..." />
+      <label class="field-label" data-en="Request description" data-fr="Description de la demande">Request description <span class="req">*</span></label>
+      <input class="field-input" id="f-description" type="text" data-placeholder-en="e.g. Package delivery..." data-placeholder-fr="Ex : Livraison de colis..." placeholder="e.g. Package delivery..." />
     </div>
+
     <div class="section-card" id="dispo-lavage">
-      <p class="section-title">Preferred availability</p>
-      <p class="section-desc">Car wash available Tuesday, Wednesday and Thursday mornings only.</p>
+      <p class="section-title" data-en="Preferred availability" data-fr="Disponibilités souhaitées">Preferred availability</p>
+      <p class="section-desc" data-en="Car wash available Tuesday, Wednesday and Thursday mornings only." data-fr="Lavage disponible le mardi, mercredi et jeudi matin seulement.">Car wash available Tuesday, Wednesday and Thursday mornings only.</p>
       <div class="divider"></div>
-      <label class="field-label" style="margin-bottom:8px;">Preferred day</label>
+      <label class="field-label" data-en="Preferred day" data-fr="Jour préféré" style="margin-bottom:8px;">Preferred day</label>
       <div class="day-grid-3" id="days-lavage">
-        <button type="button" class="slot-btn" onclick="selectDay(this)">Tuesday</button>
-        <button type="button" class="slot-btn" onclick="selectDay(this)">Wednesday</button>
-        <button type="button" class="slot-btn" onclick="selectDay(this)">Thursday</button>
+        <button type="button" class="slot-btn" onclick="selectDay(this)" data-en="Tuesday" data-fr="Mardi">Tuesday</button>
+        <button type="button" class="slot-btn" onclick="selectDay(this)" data-en="Wednesday" data-fr="Mercredi">Wednesday</button>
+        <button type="button" class="slot-btn" onclick="selectDay(this)" data-en="Thursday" data-fr="Jeudi">Thursday</button>
       </div>
       <div style="margin-top: 16px;">
-        <label class="field-label" style="margin-bottom:8px;">Time slot</label>
-        <div class="static-slot">Morning (7 AM – 12 PM)</div>
-        <span class="slot-note">Only available time slot</span>
+        <label class="field-label" data-en="Time slot" data-fr="Plage horaire" style="margin-bottom:8px;">Time slot</label>
+        <div class="static-slot" data-en="Morning (7 AM – 12 PM)" data-fr="Matin (7h – 12h)">Morning (7 AM – 12 PM)</div>
+        <span class="slot-note" data-en="Only available time slot" data-fr="Seul créneau disponible">Only available time slot</span>
       </div>
     </div>
+
     <div class="card" style="border-radius: 0 0 12px 12px;">
       <div class="btn-row">
-        <button type="button" class="btn-clear" onclick="clearForm()">Clear form</button>
-        <button type="button" class="btn-submit" onclick="submitForm()">Submit request</button>
+        <button type="button" class="btn-clear" onclick="clearForm()" data-en="Clear form" data-fr="Effacer">Clear form</button>
+        <button type="button" class="btn-submit" onclick="submitForm()" data-en="Submit request" data-fr="Envoyer la demande">Submit request</button>
       </div>
     </div>
   </div>
+
   <div class="success-screen" id="success-screen">
     <div class="success-icon">✅</div>
-    <h2>Request submitted!</h2>
-    <p>Thank you. Quentin will contact you shortly.</p>
+    <h2 data-en="Request submitted!" data-fr="Demande envoyée !">Request submitted!</h2>
+    <p data-en="Thank you. Quentin will contact you shortly." data-fr="Merci. Quentin vous contactera sous peu.">Thank you. Quentin will contact you shortly.</p>
     <br />
-    <button type="button" class="btn-submit" onclick="resetForm()" style="margin-top:8px;">New request</button>
+    <button type="button" class="btn-submit" onclick="resetForm()" style="margin-top:8px;" data-en="New request" data-fr="Nouvelle demande">New request</button>
   </div>
 </div>
+
 <script>
   var currentService = 'lavage';
+  var currentLang = 'en';
+
+  function setLang(lang) {
+    currentLang = lang;
+    document.querySelectorAll('.lang-opt').forEach(function(b) { b.classList.remove('active'); });
+    document.querySelector('.lang-opt[onclick="setLang(\'' + lang + '\')"]').classList.add('active');
+    document.querySelectorAll('[data-' + lang + ']').forEach(function(el) {
+      var txt = el.getAttribute('data-' + lang);
+      if (el.tagName === 'INPUT') {
+        var ph = el.getAttribute('data-placeholder-' + lang);
+        if (ph) el.placeholder = ph;
+      } else {
+        var req = el.querySelector('.req');
+        el.childNodes.forEach(function(n){ if (n.nodeType === 3) n.textContent = ''; });
+        el.insertAdjacentText('afterbegin', txt);
+        if (req) el.appendChild(req);
+      }
+    });
+  }
+
   function selectService(type) {
     currentService = type;
     document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('sel'); });
@@ -205,17 +259,368 @@
   }
   function getText(id) { var el = document.getElementById(id); return el ? el.value : ''; }
   function submitForm() {
-    var valid = true;
-    function validate(fieldId, errId) {
-      var f = document.getElementById(fieldId);
-      var e = document.getElementById(errId);
-      if (!f.value.trim()) { f.classList.add('input-error'); e.classList.add('show'); valid = false; }
-      else { f.classList.remove('input-error'); e.classList.remove('show'); }
+    var appart = document.getElementById('f-appart');
+    var errAppart = document.getElementById('err-appart');
+    if (!appart.value.trim()) {
+      appart.classList.add('input-error');
+      errAppart.classList.add('show');
+      appart.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
     }
-    validate('f-appart', 'err-appart');
-    if (!valid) { document.getElementById('f-appart').scrollIntoView({ behavior: 'smooth', block: 'center' }); return; }
-    var service = document.querySelector('.filter-btn.sel .filter-text') ? document.querySelector('.filter-btn.sel .filter-text').textContent : '';
+    appart.classList.remove('input-error');
+    errAppart.classList.remove('show');
+    var service = document.querySelector('.filter-btn.sel .filter-text') ? document.querySelector('.filter-btn.sel .filter-text').textContent.trim() : '';
     var data = { apartment: getText('f-appart'), service: service };
+    if (currentService === 'lavage') {
+      var vEl = document.querySelector('#rg-vehicule .radio-option.selected .radio-text');
+      var oEl = document.querySelector('#rg-options .radio-option.selected .radio-text');
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Service Request — Appartements Le Château</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --blue: #1a73e8; --blue-light: #e8f0fe; --blue-text: #1a55b5;
+    --yellow: #fbbc04; --red: #e53935; --bg: #f0ebf8;
+    --surface: #ffffff; --border: rgba(0,0,0,0.12);
+    --text: #202124; --text-secondary: #5f6368;
+    --radius: 8px; --radius-lg: 12px;
+  }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); min-height: 100vh; padding: 32px 16px 64px; color: var(--text); }
+  .page { max-width: 640px; margin: 0 auto; }
+  .lang-bar { display: flex; justify-content: flex-start; margin-bottom: 12px; }
+  .lang-btn { background: var(--surface); border: 0.5px solid var(--border); border-radius: 20px; padding: 6px 16px; font-size: 13px; font-family: 'DM Sans', sans-serif; font-weight: 500; cursor: pointer; color: var(--text-secondary); transition: all 0.15s; }
+  .lang-btn:hover { border-color: var(--blue); color: var(--blue); }
+  .lang-btn.active { background: var(--blue); color: #fff; border-color: var(--blue); }
+  .lang-toggle { display: flex; gap: 6px; background: var(--surface); border: 0.5px solid var(--border); border-radius: 24px; padding: 4px; }
+  .form-header { background: var(--blue); border-radius: var(--radius-lg) var(--radius-lg) 0 0; padding: 28px 32px 24px; }
+  .form-header h1 { color: #fff; font-size: 24px; font-weight: 600; margin-bottom: 6px; }
+  .form-header p { color: rgba(255,255,255,0.82); font-size: 14px; line-height: 1.6; }
+  .header-bar { height: 10px; background: var(--yellow); margin-bottom: 16px; }
+  .card { background: var(--surface); border: 0.5px solid var(--border); padding: 24px 32px; margin-bottom: 12px; }
+  .card:last-of-type { border-radius: 0 0 var(--radius-lg) var(--radius-lg); }
+  .section-card { background: var(--surface); border: 0.5px solid var(--border); border-left: 4px solid var(--blue); border-radius: var(--radius-lg); padding: 24px 32px; margin-bottom: 12px; }
+  .section-title { font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+  .section-desc { font-size: 13px; color: var(--text-secondary); margin-bottom: 0; line-height: 1.5; }
+  .divider { height: 0.5px; background: var(--border); margin: 18px 0; }
+  .field-label { display: block; font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 10px; }
+  .req { color: var(--red); margin-left: 2px; }
+  .field-input { width: 100%; border: none; border-bottom: 1px solid #9e9e9e; padding: 8px 0; font-size: 14px; font-family: 'DM Sans', sans-serif; color: var(--text); background: transparent; outline: none; }
+  .field-input:focus { border-bottom: 2px solid var(--blue); }
+  .field-input::placeholder { color: #bdbdbd; }
+  .field-date { width: 100%; border: 0.5px solid var(--border); border-radius: var(--radius); padding: 10px 14px; font-size: 14px; font-family: 'DM Sans', sans-serif; color: var(--text); background: var(--surface); outline: none; margin-top: 4px; }
+  .field-date:focus { border-color: var(--blue); box-shadow: 0 0 0 2px var(--blue-light); }
+  .radio-group { display: flex; flex-direction: column; gap: 8px; }
+  .radio-option { display: flex; align-items: center; gap: 12px; padding: 11px 16px; border-radius: var(--radius); border: 0.5px solid var(--border); cursor: pointer; user-select: none; }
+  .radio-option.selected { border-color: var(--blue); background: var(--blue-light); }
+  .radio-circle { width: 20px; height: 20px; border-radius: 50%; border: 2px solid #9e9e9e; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+  .radio-option.selected .radio-circle { border-color: var(--blue); }
+  .radio-option.selected .radio-circle::after { content: ''; width: 10px; height: 10px; border-radius: 50%; background: var(--blue); }
+  .radio-text { font-size: 14px; color: var(--text); }
+  .filter-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .filter-btn { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-radius: var(--radius-lg); border: 0.5px solid var(--border); cursor: pointer; background: var(--surface); user-select: none; }
+  .filter-btn.sel { border-color: var(--blue); background: var(--blue-light); }
+  .filter-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+  .fi-wash { background: #deeafd; } .fi-plane { background: #fde8e6; } .fi-rdv { background: #e2f4e4; } .fi-other { background: #fef3d8; }
+  .filter-text { font-size: 14px; font-weight: 500; color: var(--text); }
+  .filter-sub { font-size: 11px; color: var(--text-secondary); display: block; }
+  .day-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+  .slot-btn { padding: 9px 12px; border-radius: var(--radius); border: 0.5px solid var(--border); font-size: 13px; font-family: 'DM Sans', sans-serif; color: var(--text); background: var(--surface); cursor: pointer; text-align: center; transition: background 0.1s, border-color 0.1s; }
+  .slot-btn:hover { background: #f8f8f8; }
+  .slot-btn.sel { border-color: var(--blue); background: var(--blue-light); color: var(--blue-text); font-weight: 600; }
+  .slot-note { font-size: 12px; color: var(--text-secondary); margin-top: 8px; display: block; }
+  .static-slot { display: inline-block; padding: 9px 16px; border-radius: var(--radius); border: 0.5px solid var(--blue); background: var(--blue-light); font-size: 13px; font-weight: 600; color: var(--blue-text); }
+  .btn-row { display: flex; justify-content: flex-end; align-items: center; gap: 12px; padding-top: 4px; }
+  .btn-clear { background: transparent; color: var(--blue); border: none; border-radius: 6px; padding: 10px 18px; font-size: 14px; font-family: 'DM Sans', sans-serif; font-weight: 500; cursor: pointer; }
+  .btn-submit { background: var(--blue); color: #fff; border: none; border-radius: 6px; padding: 11px 28px; font-size: 14px; font-family: 'DM Sans', sans-serif; font-weight: 600; cursor: pointer; }
+  .hidden { display: none !important; }
+  .success-screen { display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 60px 32px; background: var(--surface); border-radius: var(--radius-lg); border: 0.5px solid var(--border); }
+  .success-screen.visible { display: flex; }
+  .success-icon { width: 64px; height: 64px; border-radius: 50%; background: #e2f4e4; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; font-size: 28px; }
+  .success-screen h2 { font-size: 20px; font-weight: 600; margin-bottom: 10px; }
+  .field-error { font-size: 12px; color: var(--red); margin-top: 6px; display: none; }
+  .field-error.show { display: block; }
+  .input-error { border-bottom-color: var(--red) !important; }
+  @media (max-width: 480px) { .filter-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="lang-bar">
+    <div class="lang-toggle">
+      <button type="button" class="lang-btn active" id="btn-en" onclick="setLang('en')">EN</button>
+      <button type="button" class="lang-btn" id="btn-fr" onclick="setLang('fr')">FR</button>
+    </div>
+  </div>
+  <div class="form-header">
+    <h1 id="t-title">Service Request — Residents</h1>
+    <p id="t-subtitle">Appartements Le Château · Submit your request and Quentin will confirm your time slot.</p>
+  </div>
+  <div class="header-bar"></div>
+  <div id="main-form">
+    <div class="card">
+      <label class="field-label" id="t-appart-label">Apartment number <span class="req">*</span></label>
+      <input class="field-input" id="f-appart" type="text" placeholder="e.g. 412" />
+      <div class="field-error" id="err-appart">This field is required.</div>
+    </div>
+    <div class="section-card">
+      <p class="section-title" id="t-service-title">What service are you looking for? <span class="req">*</span></p>
+      <p class="section-desc" id="t-service-desc">Select a category to continue.</p>
+      <div class="divider"></div>
+      <div class="filter-grid">
+        <div class="filter-btn sel" data-service="lavage" onclick="selectService('lavage')"><div class="filter-icon fi-wash">🚗</div><div><div class="filter-text" id="t-wash">Car Wash</div><span class="filter-sub" id="t-wash-sub">Exterior / interior</span></div></div>
+        <div class="filter-btn" data-service="aeroport" onclick="selectService('aeroport')"><div class="filter-icon fi-plane">✈️</div><div><div class="filter-text" id="t-airport">Airport Transport</div><span class="filter-sub" id="t-airport-sub">Drop-off / pick-up</span></div></div>
+        <div class="filter-btn" data-service="rdv" onclick="selectService('rdv')"><div class="filter-icon fi-rdv">📍</div><div><div class="filter-text" id="t-rdv">Appointment Transport</div><span class="filter-sub" id="t-rdv-sub">General ride</span></div></div>
+        <div class="filter-btn" data-service="autres" onclick="selectService('autres')"><div class="filter-icon fi-other">⚡</div><div><div class="filter-text" id="t-other">Other Services</div><span class="filter-sub" id="t-other-sub">Any other request</span></div></div>
+      </div>
+    </div>
+    <div class="section-card" id="sec-lavage">
+      <p class="section-title" id="t-wash-title">Car wash service <span class="req">*</span></p>
+      <p class="section-desc" id="t-wash-desc">Select your vehicle type and desired options.</p>
+      <div class="divider"></div>
+      <label class="field-label" id="t-vehicle-label" style="margin-bottom:8px;">Vehicle type</label>
+      <div class="radio-group" id="rg-vehicule">
+        <div class="radio-option selected" onclick="selectRadio('rg-vehicule', this)"><div class="radio-circle"></div><span class="radio-text" id="t-car">Car</span></div>
+        <div class="radio-option" onclick="selectRadio('rg-vehicule', this)"><div class="radio-circle"></div><span class="radio-text">SUV</span></div>
+      </div>
+      <div class="divider"></div>
+      <label class="field-label" id="t-options-label" style="margin-bottom:8px;">Options</label>
+      <div class="radio-group" id="rg-options">
+        <div class="radio-option selected" onclick="selectRadio('rg-options', this)"><div class="radio-circle"></div><span class="radio-text" id="t-ext">Exterior wash</span></div>
+        <div class="radio-option" onclick="selectRadio('rg-options', this)"><div class="radio-circle"></div><span class="radio-text" id="t-int">Interior cleaning</span></div>
+        <div class="radio-option" onclick="selectRadio('rg-options', this)"><div class="radio-circle"></div><span class="radio-text" id="t-full">Full — Interior + Exterior</span></div>
+      </div>
+    </div>
+    <div class="section-card hidden" id="sec-aeroport">
+      <p class="section-title" id="t-airport-title">Airport transport</p>
+      <p class="section-desc" id="t-airport-desc">Specify your preferred direction, date and time.</p>
+      <div class="divider"></div>
+      <div class="radio-group" id="rg-aeroport">
+        <div class="radio-option selected" onclick="selectRadio('rg-aeroport', this)"><div class="radio-circle"></div><span class="radio-text" id="t-dropoff">Drop-off (departure)</span></div>
+        <div class="radio-option" onclick="selectRadio('rg-aeroport', this)"><div class="radio-circle"></div><span class="radio-text" id="t-pickup">Pick-up (arrival)</span></div>
+        <div class="radio-option" onclick="selectRadio('rg-aeroport', this)"><div class="radio-circle"></div><span class="radio-text" id="t-roundtrip">Round trip</span></div>
+      </div>
+      <div class="divider"></div>
+      <label class="field-label" id="t-date-label">Date <span class="req">*</span></label>
+      <input class="field-date" id="f-date-aeroport" type="date" />
+      <div class="divider"></div>
+      <label class="field-label" id="t-time-label">Preferred time</label>
+      <input class="field-input" id="f-heure-aeroport" type="text" placeholder="e.g. 6:00 AM" />
+    </div>
+    <div class="section-card hidden" id="sec-rdv">
+      <p class="section-title" id="t-rdv-title">Appointment transport</p>
+      <p class="section-desc" id="t-rdv-desc">Specify the date, time and destination.</p>
+      <div class="divider"></div>
+      <label class="field-label" id="t-rdv-date-label">Date <span class="req">*</span></label>
+      <input class="field-date" id="f-date-rdv" type="date" />
+      <div class="divider"></div>
+      <label class="field-label" id="t-rdv-time-label">Preferred time</label>
+      <input class="field-input" id="f-heure" type="text" placeholder="e.g. 10:00 AM" />
+      <div class="divider"></div>
+      <label class="field-label" id="t-dest-label">Destination</label>
+      <input class="field-input" id="f-destination" type="text" placeholder="e.g. Medical clinic" />
+    </div>
+    <div class="section-card hidden" id="sec-autres">
+      <p class="section-title" id="t-other-title">Other services</p>
+      <p class="section-desc" id="t-other-desc">Describe your request and Quentin will get back to you.</p>
+      <div class="divider"></div>
+      <label class="field-label" id="t-other-date-label">Date <span class="req">*</span></label>
+      <input class="field-date" id="f-date-autres" type="date" />
+      <div class="divider"></div>
+      <label class="field-label" id="t-desc-label">Request description <span class="req">*</span></label>
+      <input class="field-input" id="f-description" type="text" placeholder="e.g. Package delivery..." />
+    </div>
+    <div class="section-card" id="dispo-lavage">
+      <p class="section-title" id="t-avail-title">Preferred availability</p>
+      <p class="section-desc" id="t-avail-desc">Car wash available Tuesday, Wednesday and Thursday mornings only.</p>
+      <div class="divider"></div>
+      <label class="field-label" id="t-day-label" style="margin-bottom:8px;">Preferred day</label>
+      <div class="day-grid-3" id="days-lavage">
+        <button type="button" class="slot-btn" id="t-tuesday" onclick="selectDay(this)">Tuesday</button>
+        <button type="button" class="slot-btn" id="t-wednesday" onclick="selectDay(this)">Wednesday</button>
+        <button type="button" class="slot-btn" id="t-thursday" onclick="selectDay(this)">Thursday</button>
+      </div>
+      <div style="margin-top: 16px;">
+        <label class="field-label" id="t-slot-label" style="margin-bottom:8px;">Time slot</label>
+        <div class="static-slot" id="t-slot-val">Morning (7 AM – 12 PM)</div>
+        <span class="slot-note" id="t-slot-note">Only available time slot</span>
+      </div>
+    </div>
+    <div class="card" style="border-radius: 0 0 12px 12px;">
+      <div class="btn-row">
+        <button type="button" class="btn-clear" id="t-clear" onclick="clearForm()">Clear form</button>
+        <button type="button" class="btn-submit" id="t-submit" onclick="submitForm()">Submit request</button>
+      </div>
+    </div>
+  </div>
+  <div class="success-screen" id="success-screen">
+    <div class="success-icon">✅</div>
+    <h2 id="t-success-title">Request submitted!</h2>
+    <p id="t-success-msg">Thank you. Quentin will contact you shortly.</p>
+    <br />
+    <button type="button" class="btn-submit" id="t-new" onclick="resetForm()" style="margin-top:8px;">New request</button>
+  </div>
+</div>
+<script>
+  var currentService = 'lavage';
+  var currentLang = 'en';
+  var T = {
+    en: {
+      title: 'Service Request — Residents',
+      subtitle: 'Appartements Le Château · Submit your request and Quentin will confirm your time slot.',
+      appart: 'Apartment number', appart_err: 'This field is required.',
+      appart_ph: 'e.g. 412',
+      service_title: 'What service are you looking for?', service_desc: 'Select a category to continue.',
+      wash: 'Car Wash', wash_sub: 'Exterior / interior',
+      airport: 'Airport Transport', airport_sub: 'Drop-off / pick-up',
+      rdv: 'Appointment Transport', rdv_sub: 'General ride',
+      other: 'Other Services', other_sub: 'Any other request',
+      wash_title: 'Car wash service', wash_desc: 'Select your vehicle type and desired options.',
+      vehicle_label: 'Vehicle type', car: 'Car',
+      options_label: 'Options', ext: 'Exterior wash', int: 'Interior cleaning', full: 'Full — Interior + Exterior',
+      airport_title: 'Airport transport', airport_desc: 'Specify your preferred direction, date and time.',
+      dropoff: 'Drop-off (departure)', pickup: 'Pick-up (arrival)', roundtrip: 'Round trip',
+      date_label: 'Date', time_label: 'Preferred time', time_ph: 'e.g. 6:00 AM',
+      rdv_title: 'Appointment transport', rdv_desc: 'Specify the date, time and destination.',
+      rdv_date: 'Date', rdv_time: 'Preferred time', rdv_time_ph: 'e.g. 10:00 AM', dest: 'Destination', dest_ph: 'e.g. Medical clinic',
+      other_title: 'Other services', other_desc: 'Describe your request and Quentin will get back to you.',
+      other_date: 'Date', desc_label: 'Request description', desc_ph: 'e.g. Package delivery...',
+      avail_title: 'Preferred availability', avail_desc: 'Car wash available Tuesday, Wednesday and Thursday mornings only.',
+      day_label: 'Preferred day', tuesday: 'Tuesday', wednesday: 'Wednesday', thursday: 'Thursday',
+      slot_label: 'Time slot', slot_val: 'Morning (7 AM – 12 PM)', slot_note: 'Only available time slot',
+      clear: 'Clear form', submit: 'Submit request',
+      success_title: 'Request submitted!', success_msg: 'Thank you. Quentin will contact you shortly.', new_req: 'New request'
+    },
+    fr: {
+      title: 'Demande de service — Résidents',
+      subtitle: 'Appartements Le Château · Soumettez votre demande et Quentin confirmera votre créneau.',
+      appart: 'Numéro d’appartement', appart_err: 'Ce champ est requis.',
+      appart_ph: 'ex. 412',
+      service_title: 'Quel service vous intéresse ?', service_desc: 'Sélectionnez une catégorie pour continuer.',
+      wash: 'Lavage auto', wash_sub: 'Extérieur / intérieur',
+      airport: 'Transport aéroport', airport_sub: 'Dépose / récupération',
+      rdv: 'Transport rendez-vous', rdv_sub: 'Course générale',
+      other: 'Autres services', other_sub: 'Toute autre demande',
+      wash_title: 'Service de lavage', wash_desc: 'Sélectionnez le type de véhicule et les options.',
+      vehicle_label: 'Type de véhicule', car: 'Voiture',
+      options_label: 'Options', ext: 'Lavage extérieur', int: 'Nettoyage intérieur', full: 'Complet — Intérieur + Extérieur',
+      airport_title: 'Transport aéroport', airport_desc: 'Précisez la direction, la date et l’heure.',
+      dropoff: 'Dépose (départ)', pickup: 'Récupération (arrivée)', roundtrip: 'Aller-retour',
+      date_label: 'Date', time_label: 'Heure préférée', time_ph: 'ex. 6h00',
+      rdv_title: 'Transport rendez-vous', rdv_desc: 'Précisez la date, l’heure et la destination.',
+      rdv_date: 'Date', rdv_time: 'Heure préférée', rdv_time_ph: 'ex. 10h00', dest: 'Destination', dest_ph: 'ex. Clinique médicale',
+      other_title: 'Autres services', other_desc: 'Décrivez votre demande et Quentin vous recontactera.',
+      other_date: 'Date', desc_label: 'Description de la demande', desc_ph: 'ex. Livraison de colis...',
+      avail_title: 'Disponibilités souhaitées', avail_desc: 'Lavage disponible le mardi, mercredi et jeudi matin seulement.',
+      day_label: 'Jour préféré', tuesday: 'Mardi', wednesday: 'Mercredi', thursday: 'Jeudi',
+      slot_label: 'Plage horaire', slot_val: 'Matin (7h – 12h)', slot_note: 'Seul créneau disponible',
+      clear: 'Effacer', submit: 'Envoyer la demande',
+      success_title: 'Demande envoyée !', success_msg: 'Merci. Quentin vous contactera sous peu.', new_req: 'Nouvelle demande'
+    }
+  };
+  function setLang(lang) {
+    currentLang = lang;
+    document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+    document.getElementById('btn-fr').classList.toggle('active', lang === 'fr');
+    var t = T[lang];
+    document.getElementById('t-title').textContent = t.title;
+    document.getElementById('t-subtitle').textContent = t.subtitle;
+    document.getElementById('t-appart-label').innerHTML = t.appart + ' <span class="req">*</span>';
+    document.getElementById('f-appart').placeholder = t.appart_ph;
+    document.getElementById('err-appart').textContent = t.appart_err;
+    document.getElementById('t-service-title').innerHTML = t.service_title + ' <span class="req">*</span>';
+    document.getElementById('t-service-desc').textContent = t.service_desc;
+    document.getElementById('t-wash').textContent = t.wash;
+    document.getElementById('t-wash-sub').textContent = t.wash_sub;
+    document.getElementById('t-airport').textContent = t.airport;
+    document.getElementById('t-airport-sub').textContent = t.airport_sub;
+    document.getElementById('t-rdv').textContent = t.rdv;
+    document.getElementById('t-rdv-sub').textContent = t.rdv_sub;
+    document.getElementById('t-other').textContent = t.other;
+    document.getElementById('t-other-sub').textContent = t.other_sub;
+    document.getElementById('t-wash-title').innerHTML = t.wash_title + ' <span class="req">*</span>';
+    document.getElementById('t-wash-desc').textContent = t.wash_desc;
+    document.getElementById('t-vehicle-label').textContent = t.vehicle_label;
+    document.getElementById('t-car').textContent = t.car;
+    document.getElementById('t-options-label').textContent = t.options_label;
+    document.getElementById('t-ext').textContent = t.ext;
+    document.getElementById('t-int').textContent = t.int;
+    document.getElementById('t-full').textContent = t.full;
+    document.getElementById('t-airport-title').textContent = t.airport_title;
+    document.getElementById('t-airport-desc').textContent = t.airport_desc;
+    document.getElementById('t-dropoff').textContent = t.dropoff;
+    document.getElementById('t-pickup').textContent = t.pickup;
+    document.getElementById('t-roundtrip').textContent = t.roundtrip;
+    document.getElementById('t-date-label').innerHTML = t.date_label + ' <span class="req">*</span>';
+    document.getElementById('t-time-label').textContent = t.time_label;
+    document.getElementById('f-heure-aeroport').placeholder = t.time_ph;
+    document.getElementById('t-rdv-title').textContent = t.rdv_title;
+    document.getElementById('t-rdv-desc').textContent = t.rdv_desc;
+    document.getElementById('t-rdv-date-label').innerHTML = t.rdv_date + ' <span class="req">*</span>';
+    document.getElementById('t-rdv-time-label').textContent = t.rdv_time;
+    document.getElementById('f-heure').placeholder = t.rdv_time_ph;
+    document.getElementById('t-dest-label').textContent = t.dest;
+    document.getElementById('f-destination').placeholder = t.dest_ph;
+    document.getElementById('t-other-title').textContent = t.other_title;
+    document.getElementById('t-other-desc').textContent = t.other_desc;
+    document.getElementById('t-other-date-label').innerHTML = t.other_date + ' <span class="req">*</span>';
+    document.getElementById('t-desc-label').textContent = t.desc_label;
+    document.getElementById('f-description').placeholder = t.desc_ph;
+    document.getElementById('t-avail-title').textContent = t.avail_title;
+    document.getElementById('t-avail-desc').textContent = t.avail_desc;
+    document.getElementById('t-day-label').textContent = t.day_label;
+    document.getElementById('t-tuesday').textContent = t.tuesday;
+    document.getElementById('t-wednesday').textContent = t.wednesday;
+    document.getElementById('t-thursday').textContent = t.thursday;
+    document.getElementById('t-slot-label').textContent = t.slot_label;
+    document.getElementById('t-slot-val').textContent = t.slot_val;
+    document.getElementById('t-slot-note').textContent = t.slot_note;
+    document.getElementById('t-clear').textContent = t.clear;
+    document.getElementById('t-submit').textContent = t.submit;
+    document.getElementById('t-success-title').textContent = t.success_title;
+    document.getElementById('t-success-msg').textContent = t.success_msg;
+    document.getElementById('t-new').textContent = t.new_req;
+  }
+  function selectService(type) {
+    currentService = type;
+    document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('sel'); });
+    document.querySelector('[data-service="' + type + '"]').classList.add('sel');
+    ['lavage','aeroport','rdv','autres'].forEach(function(s) { document.getElementById('sec-' + s).classList.toggle('hidden', s !== type); });
+    document.getElementById('dispo-lavage').classList.toggle('hidden', type !== 'lavage');
+  }
+  function selectRadio(groupId, el) {
+    document.querySelectorAll('#' + groupId + ' .radio-option').forEach(function(o) { o.classList.remove('selected'); });
+    el.classList.add('selected');
+  }
+  function selectDay(el) {
+    document.querySelectorAll('#days-lavage .slot-btn').forEach(function(b) { b.classList.remove('sel'); });
+    el.classList.add('sel');
+  }
+  function clearForm() {
+    ['f-appart','f-heure-aeroport','f-heure','f-destination','f-description'].forEach(function(id){ document.getElementById(id).value=''; });
+    ['f-date-aeroport','f-date-rdv','f-date-autres'].forEach(function(id){ document.getElementById(id).value=''; });
+    document.querySelectorAll('#days-lavage .slot-btn').forEach(function(b){ b.classList.remove('sel'); });
+    document.querySelectorAll('.field-error').forEach(function(e) { e.classList.remove('show'); });
+    document.querySelectorAll('.field-input').forEach(function(i) { i.classList.remove('input-error'); });
+    selectService('lavage');
+  }
+  function getText(id) { var el = document.getElementById(id); return el ? el.value : ''; }
+  function submitForm() {
+    var appart = document.getElementById('f-appart');
+    var errAppart = document.getElementById('err-appart');
+    if (!appart.value.trim()) {
+      appart.classList.add('input-error');
+      errAppart.classList.add('show');
+      appart.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    appart.classList.remove('input-error');
+    errAppart.classList.remove('show');
+    var service = document.querySelector('.filter-btn.sel .filter-text') ? document.querySelector('.filter-btn.sel .filter-text').textContent : '';
+    var data = { apartment: getText('f-appart'), service: service, language: currentLang };
     if (currentService === 'lavage') {
       var vEl = document.querySelector('#rg-vehicule .radio-option.selected .radio-text');
       var oEl = document.querySelector('#rg-options .radio-option.selected .radio-text');
@@ -237,17 +642,14 @@
       data.date = getText('f-date-autres');
       data.description = getText('f-description');
     }
-    var btn = document.querySelector('.btn-submit');
-    btn.textContent = 'Sending...'; btn.disabled = true;
+    document.getElementById('main-form').style.display = 'none';
+    document.getElementById('success-screen').classList.add('visible');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     fetch('https://formspree.io/f/xeeppynz', {
       method: 'POST',
       headers: {'Content-Type':'application/json','Accept':'application/json'},
       body: JSON.stringify(data)
-    }).then(function(r){
-      btn.textContent='Submit request'; btn.disabled=false;
-      if(r.ok){document.getElementById('main-form').style.display='none';document.getElementById('success-screen').classList.add('visible');window.scrollTo({top:0,behavior:'smooth'});}
-      else{alert('Something went wrong. Please try again.');}
-    }).catch(function(){btn.textContent='Submit request';btn.disabled=false;alert('Something went wrong. Please try again.');});
+    }).catch(function(){});
   }
   function resetForm() {
     clearForm();
