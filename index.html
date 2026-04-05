@@ -48,7 +48,6 @@
   .filter-text { font-size: 14px; font-weight: 500; color: var(--text); }
   .filter-sub { font-size: 11px; color: var(--text-secondary); display: block; }
   .day-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
-  .day-grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 8px; }
   .slot-btn { padding: 9px 12px; border-radius: var(--radius); border: 0.5px solid var(--border); font-size: 13px; font-family: 'DM Sans', sans-serif; color: var(--text); background: var(--surface); cursor: pointer; text-align: center; }
   .slot-btn.sel { border-color: var(--blue); background: var(--blue-light); color: var(--blue-text); font-weight: 600; }
   .slot-note { font-size: 12px; color: var(--text-secondary); margin-top: 8px; display: block; }
@@ -64,7 +63,7 @@
   .field-error { font-size: 12px; color: var(--red); margin-top: 6px; display: none; }
   .field-error.show { display: block; }
   .input-error { border-bottom-color: var(--red) !important; }
-  @media (max-width: 480px) { .filter-grid { grid-template-columns: 1fr; } .day-grid-4 { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 480px) { .filter-grid { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
@@ -91,6 +90,8 @@
         <div class="filter-btn" data-service="autres" onclick="selectService('autres')"><div class="filter-icon fi-other">⚡</div><div><div class="filter-text">Other Services</div><span class="filter-sub">Any other request</span></div></div>
       </div>
     </div>
+
+    <!-- Car Wash -->
     <div class="section-card" id="sec-lavage">
       <p class="section-title">Car wash service <span class="req">*</span></p>
       <p class="section-desc">Select your vehicle type and desired options.</p>
@@ -108,9 +109,11 @@
         <div class="radio-option" onclick="selectRadio('rg-options', this)"><div class="radio-circle"></div><span class="radio-text">Full — Interior + Exterior</span></div>
       </div>
     </div>
+
+    <!-- Airport Transport -->
     <div class="section-card hidden" id="sec-aeroport">
       <p class="section-title">Airport transport</p>
-      <p class="section-desc">Specify your flight details and preferred direction.</p>
+      <p class="section-desc">Specify your preferred direction, date and time.</p>
       <div class="divider"></div>
       <div class="radio-group" id="rg-aeroport">
         <div class="radio-option selected" onclick="selectRadio('rg-aeroport', this)"><div class="radio-circle"></div><span class="radio-text">Drop-off (departure)</span></div>
@@ -121,22 +124,26 @@
       <label class="field-label">Date <span class="req">*</span></label>
       <input class="field-date" id="f-date-aeroport" type="date" />
       <div class="divider"></div>
-      <label class="field-label">Flight number / departure time</label>
-      <input class="field-input" id="f-vol" type="text" placeholder="e.g. AC831 — departure 2:30 PM" />
+      <label class="field-label">Preferred time</label>
+      <input class="field-input" id="f-heure-aeroport" type="text" placeholder="e.g. 6:00 AM" />
     </div>
+
+    <!-- Appointment Transport -->
     <div class="section-card hidden" id="sec-rdv">
       <p class="section-title">Appointment transport</p>
-      <p class="section-desc">Specify the destination, date and preferred time.</p>
+      <p class="section-desc">Specify the date, time and destination.</p>
       <div class="divider"></div>
       <label class="field-label">Date <span class="req">*</span></label>
       <input class="field-date" id="f-date-rdv" type="date" />
       <div class="divider"></div>
-      <label class="field-label">Destination <span class="req">*</span></label>
-      <input class="field-input" id="f-destination" type="text" placeholder="e.g. Medical clinic" />
-      <div class="divider"></div>
       <label class="field-label">Preferred time</label>
       <input class="field-input" id="f-heure" type="text" placeholder="e.g. 10:00 AM" />
+      <div class="divider"></div>
+      <label class="field-label">Destination</label>
+      <input class="field-input" id="f-destination" type="text" placeholder="e.g. Medical clinic" />
     </div>
+
+    <!-- Other Services -->
     <div class="section-card hidden" id="sec-autres">
       <p class="section-title">Other services</p>
       <p class="section-desc">Describe your request and Quentin will get back to you.</p>
@@ -147,6 +154,8 @@
       <label class="field-label">Request description <span class="req">*</span></label>
       <input class="field-input" id="f-description" type="text" placeholder="e.g. Package delivery..." />
     </div>
+
+    <!-- Preferred availability — Car Wash only -->
     <div class="section-card" id="dispo-lavage">
       <p class="section-title">Preferred availability</p>
       <p class="section-desc">Car wash available Tuesday, Wednesday and Thursday mornings only.</p>
@@ -163,18 +172,7 @@
         <span class="slot-note">Only available time slot</span>
       </div>
     </div>
-    <div class="section-card hidden" id="dispo-autres">
-      <p class="section-title">Preferred availability</p>
-      <p class="section-desc">Service available Monday through Thursday.</p>
-      <div class="divider"></div>
-      <label class="field-label" style="margin-bottom:8px;">Preferred day</label>
-      <div class="day-grid-4" id="days-autres">
-        <button class="slot-btn sel" onclick="selectDay('days-autres', this)">Monday</button>
-        <button class="slot-btn" onclick="selectDay('days-autres', this)">Tuesday</button>
-        <button class="slot-btn" onclick="selectDay('days-autres', this)">Wednesday</button>
-        <button class="slot-btn" onclick="selectDay('days-autres', this)">Thursday</button>
-      </div>
-    </div>
+
     <div class="card" style="border-radius: 0 0 12px 12px;">
       <div class="btn-row">
         <button class="btn-clear" onclick="clearForm()">Clear form</button>
@@ -182,6 +180,7 @@
       </div>
     </div>
   </div>
+
   <div class="success-screen" id="success-screen">
     <div class="success-icon">✅</div>
     <h2>Request submitted!</h2>
@@ -197,9 +196,7 @@
     document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('sel'); });
     document.querySelector('[data-service="' + type + '"]').classList.add('sel');
     ['lavage','aeroport','rdv','autres'].forEach(function(s) { document.getElementById('sec-' + s).classList.toggle('hidden', s !== type); });
-    var isLavage = type === 'lavage';
-    document.getElementById('dispo-lavage').classList.toggle('hidden', !isLavage);
-    document.getElementById('dispo-autres').classList.toggle('hidden', isLavage);
+    document.getElementById('dispo-lavage').classList.toggle('hidden', type !== 'lavage');
   }
   function selectRadio(groupId, el) {
     document.querySelectorAll('#' + groupId + ' .radio-option').forEach(function(o) { o.classList.remove('selected'); });
@@ -210,14 +207,8 @@
     el.classList.add('sel');
   }
   function clearForm() {
-    document.getElementById('f-appart').value = '';
-    document.getElementById('f-vol').value = '';
-    document.getElementById('f-destination').value = '';
-    document.getElementById('f-heure').value = '';
-    document.getElementById('f-description').value = '';
-    document.getElementById('f-date-aeroport').value = '';
-    document.getElementById('f-date-rdv').value = '';
-    document.getElementById('f-date-autres').value = '';
+    ['f-appart','f-heure-aeroport','f-heure','f-destination','f-description'].forEach(function(id){ document.getElementById(id).value=''; });
+    ['f-date-aeroport','f-date-rdv','f-date-autres'].forEach(function(id){ document.getElementById(id).value=''; });
     document.querySelectorAll('.field-error').forEach(function(e) { e.classList.remove('show'); });
     document.querySelectorAll('.field-input').forEach(function(i) { i.classList.remove('input-error'); });
     selectService('lavage');
@@ -242,6 +233,7 @@
     var vehicle = document.querySelector('#rg-vehicule .radio-option.selected .radio-text') ? document.querySelector('#rg-vehicule .radio-option.selected .radio-text').textContent : '';
     var options = document.querySelector('#rg-options .radio-option.selected .radio-text') ? document.querySelector('#rg-options .radio-option.selected .radio-text').textContent : '';
     var day = document.querySelector('.slot-btn.sel') ? document.querySelector('.slot-btn.sel').textContent : '';
+    var direction = document.querySelector('#rg-aeroport .radio-option.selected .radio-text') ? document.querySelector('#rg-aeroport .radio-option.selected .radio-text').textContent : '';
     var btn = document.querySelector('.btn-submit');
     btn.textContent = 'Sending...'; btn.disabled = true;
     fetch('https://formspree.io/f/xeeppynz', {
@@ -249,11 +241,14 @@
       headers: {'Content-Type':'application/json','Accept':'application/json'},
       body: JSON.stringify({
         apartment: document.getElementById('f-appart').value,
-        service: service, vehicle: vehicle, options: options, preferred_day: day,
+        service: service,
+        vehicle: vehicle,
+        options: options,
+        preferred_day: day,
+        direction: direction,
         date: getDate(),
-        flight: document.getElementById('f-vol').value,
+        preferred_time: currentService === 'aeroport' ? document.getElementById('f-heure-aeroport').value : document.getElementById('f-heure').value,
         destination: document.getElementById('f-destination').value,
-        preferred_time: document.getElementById('f-heure').value,
         description: document.getElementById('f-description').value
       })
     }).then(function(r){
