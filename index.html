@@ -7,30 +7,14 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   :root {
-    --blue: #1a73e8;
-    --blue-light: #e8f0fe;
-    --blue-text: #1a55b5;
-    --yellow: #fbbc04;
-    --red: #e53935;
-    --bg: #f0ebf8;
-    --surface: #ffffff;
-    --border: rgba(0,0,0,0.12);
-    --text: #202124;
-    --text-secondary: #5f6368;
-    --radius: 8px;
-    --radius-lg: 12px;
+    --blue: #1a73e8; --blue-light: #e8f0fe; --blue-text: #1a55b5;
+    --yellow: #fbbc04; --red: #e53935; --bg: #f0ebf8;
+    --surface: #ffffff; --border: rgba(0,0,0,0.12);
+    --text: #202124; --text-secondary: #5f6368;
+    --radius: 8px; --radius-lg: 12px;
   }
-
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--bg);
-    min-height: 100vh;
-    padding: 32px 16px 64px;
-    color: var(--text);
-  }
-
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); min-height: 100vh; padding: 32px 16px 64px; color: var(--text); }
   .page { max-width: 640px; margin: 0 auto; }
   .form-header { background: var(--blue); border-radius: var(--radius-lg) var(--radius-lg) 0 0; padding: 28px 32px 24px; }
   .form-header h1 { color: #fff; font-size: 24px; font-weight: 600; margin-bottom: 6px; }
@@ -106,22 +90,10 @@
       <p class="section-desc">Select a category to continue.</p>
       <div class="divider"></div>
       <div class="filter-grid">
-        <div class="filter-btn sel" data-service="lavage" onclick="selectService('lavage')">
-          <div class="filter-icon fi-wash">🚗</div>
-          <div><div class="filter-text">Car Wash</div><span class="filter-sub">Exterior / interior</span></div>
-        </div>
-        <div class="filter-btn" data-service="aeroport" onclick="selectService('aeroport')">
-          <div class="filter-icon fi-plane">✈️</div>
-          <div><div class="filter-text">Airport Transport</div><span class="filter-sub">Drop-off / pick-up</span></div>
-        </div>
-        <div class="filter-btn" data-service="rdv" onclick="selectService('rdv')">
-          <div class="filter-icon fi-rdv">📍</div>
-          <div><div class="filter-text">Appointment Transport</div><span class="filter-sub">General ride</span></div>
-        </div>
-        <div class="filter-btn" data-service="autres" onclick="selectService('autres')">
-          <div class="filter-icon fi-other">⚡</div>
-          <div><div class="filter-text">Other Services</div><span class="filter-sub">Any other request</span></div>
-        </div>
+        <div class="filter-btn sel" data-service="lavage" onclick="selectService('lavage')"><div class="filter-icon fi-wash">🚗</div><div><div class="filter-text">Car Wash</div><span class="filter-sub">Exterior / interior</span></div></div>
+        <div class="filter-btn" data-service="aeroport" onclick="selectService('aeroport')"><div class="filter-icon fi-plane">✈️</div><div><div class="filter-text">Airport Transport</div><span class="filter-sub">Drop-off / pick-up</span></div></div>
+        <div class="filter-btn" data-service="rdv" onclick="selectService('rdv')"><div class="filter-icon fi-rdv">📍</div><div><div class="filter-text">Appointment Transport</div><span class="filter-sub">General ride</span></div></div>
+        <div class="filter-btn" data-service="autres" onclick="selectService('autres')"><div class="filter-icon fi-other">⚡</div><div><div class="filter-text">Other Services</div><span class="filter-sub">Any other request</span></div></div>
       </div>
     </div>
     <div class="section-card" id="sec-lavage">
@@ -255,9 +227,28 @@
     }
     validate('f-appart', 'err-appart');
     if (!valid) { document.getElementById('f-appart').scrollIntoView({ behavior: 'smooth', block: 'center' }); return; }
-    document.getElementById('main-form').style.display = 'none';
-    document.getElementById('success-screen').classList.add('visible');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    var service = document.querySelector('.filter-btn.sel .filter-text') ? document.querySelector('.filter-btn.sel .filter-text').textContent : '';
+    var vehicle = document.querySelector('#rg-vehicule .radio-option.selected .radio-text') ? document.querySelector('#rg-vehicule .radio-option.selected .radio-text').textContent : '';
+    var options = Array.from(document.querySelectorAll('.check-option.checked .check-text')).map(function(e){return e.textContent.trim();}).join(', ');
+    var day = document.querySelector('.slot-btn.sel') ? document.querySelector('.slot-btn.sel').textContent : '';
+    var btn = document.querySelector('.btn-submit');
+    btn.textContent = 'Sending...'; btn.disabled = true;
+    fetch('https://formspree.io/f/xeeppynz', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json','Accept':'application/json'},
+      body: JSON.stringify({
+        apartment: document.getElementById('f-appart').value,
+        service: service, vehicle: vehicle, options: options, preferred_day: day,
+        flight: document.getElementById('f-vol').value,
+        destination: document.getElementById('f-destination').value,
+        preferred_time: document.getElementById('f-heure').value,
+        description: document.getElementById('f-description').value
+      })
+    }).then(function(r){
+      btn.textContent='Submit request'; btn.disabled=false;
+      if(r.ok){document.getElementById('main-form').style.display='none';document.getElementById('success-screen').classList.add('visible');window.scrollTo({top:0,behavior:'smooth'});}
+      else{alert('Something went wrong. Please try again.');}
+    }).catch(function(){btn.textContent='Submit request';btn.disabled=false;alert('Something went wrong. Please try again.');});
   }
   function resetForm() {
     clearForm();
